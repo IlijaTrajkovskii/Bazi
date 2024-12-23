@@ -1,0 +1,11 @@
+CREATE view temp as 
+select p.k_ime , p.ime, count (*) as br_zapisi 
+from Korisnik as k LEFT JOIN Premium_korisnik as pk on k.k_ime = pk.k_ime  JOIN Profil as p on k.k_ime = p.k_ime 
+                   JOIN Lista_zelbi as lzz on lzz.k_ime = p.k_ime AND lzz.ime = p.ime 
+where pk.k_ime is null
+GROUP BY p.k_ime , p.ime;
+
+select k_ime, avg(br_zapisi)
+from temp
+group by k_ime       
+
