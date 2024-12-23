@@ -1,3 +1,13 @@
 1.За секој обичен корисник да се врати просечниот број видео записи во листата на желби од неговите профили.
 2.Да се вратат профилите на премиум корисници кои во листата на желби имаат видео записи со просечна оцена над 3.
 
+SELECT k.k_ime, AVG(broj_videa) AS avg_broj_videa
+FROM Korisnik AS k
+JOIN Profil AS prof ON k.k_ime = prof.k_ime
+LEFT JOIN (
+    SELECT lz.k_ime, lz.ime, COUNT(*) AS broj_videa
+    FROM Lista_zelbi AS lz
+    GROUP BY lz.k_ime, lz.ime
+) AS video_counts ON prof.k_ime = video_counts.k_ime AND prof.ime = video_counts.ime
+WHERE k.tip = 'obicen'
+GROUP BY k.k_ime;
